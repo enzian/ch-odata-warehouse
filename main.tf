@@ -1,19 +1,20 @@
 terraform {
   backend "gcs" {
-    bucket = "ch-odata-wh-tf-state"
+    bucket = "ch-odwh-tf-state"
     prefix = "backend/terraform.tfstate"
   }
 }
 
 provider "google" {
-  project = "ch-odata-warehouse"
+  project = "ch-odata-warehouse-433011"
   region  = "europe-west1"
 }
 
 resource "google_project" "ch-odata-wh-project" {
   name            = "ch-odata-warehouse"
-  project_id      = "ch-odata-warehouse"
-  billing_account = "01F8A8-7C1908-1BF0DD"
+  project_id      = "ch-odata-warehouse-433011"
+  org_id          = "532146608049"
+  billing_account = "013AD9-5D5806-C6800B"
 }
 
 // enable big query api
@@ -60,6 +61,8 @@ resource "google_bigquery_dataset" "ch_meteo" {
   labels = {
     env = "dev"
   }
+
+  depends_on = [google_project_service.bq-svc]
 }
 
 resource "google_bigquery_table" "sunshine_10min" {
@@ -321,7 +324,7 @@ resource "google_cloud_run_v2_job" "meteo_sunshine_10min" {
   template {
     template {
       containers {
-        image = "google/cloud-sdk"
+        image = "google/cloud-sdk:alpine"
         command = [
           "bash",
           "-c",
@@ -343,7 +346,7 @@ resource "google_cloud_run_v2_job" "meteo_radiation_10min" {
   template {
     template {
       containers {
-        image = "google/cloud-sdk"
+        image = "google/cloud-sdk:alpine"
         command = [
           "bash",
           "-c",
