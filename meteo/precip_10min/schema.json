@@ -1,0 +1,32 @@
+[
+  {
+    "name": "station",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "the human readable name of the station"
+  },
+  {
+    "name": "abbr",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "the standardized abbreviation for the measuring station"
+  },
+  {
+    "name": "wigos_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "the WMO Integrated Global Observing System ID"
+  },
+  {
+    "name": "precip",
+    "type": "FLOAT64",
+    "mode": "REQUIRED",
+    "description": "Current measurement values of Precipitation, 10 min total [mm]"
+  },
+  {
+    "name": "date_time",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "the date and time at which the measurement was taken"
+  }
+]
