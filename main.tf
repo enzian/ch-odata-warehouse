@@ -6,8 +6,10 @@ terraform {
 }
 
 provider "google" {
-  project = "ch-odata-warehouse-433011"
-  region  = "europe-west1"
+  project               = "ch-odata-warehouse-433011"
+  billing_project       = "ch-odata-warehouse-433011"
+  region                = "europe-west1"
+  user_project_override = true
 }
 
 resource "google_project" "ch-odata-wh-project" {
@@ -15,6 +17,30 @@ resource "google_project" "ch-odata-wh-project" {
   project_id      = "ch-odata-warehouse-433011"
   org_id          = "532146608049"
   billing_account = "013AD9-5D5806-C6800B"
+}
+
+resource "google_project_service" "iam-api" {
+  project = google_project.ch-odata-wh-project.project_id
+  service = "iam.googleapis.com"
+
+  timeouts {
+    create = "30m"
+    update = "40m"
+  }
+
+  disable_on_destroy = true
+}
+
+resource "google_project_service" "serviceuasage-api" {
+  project = google_project.ch-odata-wh-project.project_id
+  service = "serviceusage.googleapis.com"
+
+  timeouts {
+    create = "30m"
+    update = "40m"
+  }
+
+  disable_on_destroy = true
 }
 
 // enable big query api
@@ -97,7 +123,7 @@ resource "google_bigquery_data_transfer_config" "radation_dedup_job" {
   params = {
     query = file("${path.root}/meteo/radiation_10min/duplicate_cleanup.sql")
   }
-  
+
   depends_on = [google_project_iam_member.datatransfer-permissions]
 }
 
@@ -134,4 +160,3 @@ resource "google_project_iam_binding" "scrape_trigger_cloud_run_invoker" {
     "serviceAccount:${google_service_account.scrape_trigger.email}",
   ]
 }
-

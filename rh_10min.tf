@@ -57,6 +57,8 @@ resource "google_cloud_scheduler_job" "meteo_rh_10m" {
       service_account_email = google_service_account.scrape_trigger.email
     }
   }
+  
+  paused = true
 
   retry_config {
     min_backoff_duration = "10s"

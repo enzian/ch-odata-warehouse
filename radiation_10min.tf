@@ -33,6 +33,8 @@ resource "google_cloud_scheduler_job" "meteo_radation_trigger" {
       service_account_email = google_service_account.scrape_trigger.email
     }
   }
+  
+  paused = true
 
   retry_config {
     min_backoff_duration = "10s"
@@ -69,5 +71,5 @@ resource "google_bigquery_table" "radiation_10min" {
     }
   }
 
-  schema = file("${path.root}/meteo/radiation_10min/radiation_10min.schema.json")
+  schema = file("${path.root}/meteo/radiation_10min/radiation_10min.json")
 }

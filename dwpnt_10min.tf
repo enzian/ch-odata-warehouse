@@ -7,6 +7,15 @@ resource "google_bigquery_table" "dwpnt_10min" {
     field = "date_time"
   }
 
+  description = <<-EOT
+  Current measurement values of Dew point, 10 min [°C].Data is updated
+  every 10 minutes. The data set contains all weather stations of the
+  SwissMetNet, the automatic monitoring network of MeteoSwiss, which 
+  comprises 160 automatic monitoring stations. These stations deliver a
+  multitude of current data on the weather and climate in Switzerland
+  every ten minutes.
+EOT
+
   clustering = ["abbr", "station", "wigos_id"]
 
   labels = {
@@ -62,6 +71,8 @@ resource "google_cloud_scheduler_job" "meteo_dwpnt_10m" {
     min_backoff_duration = "10s"
     max_doublings        = 6
   }
+
+  paused = true
 
   attempt_deadline = "60s"
 

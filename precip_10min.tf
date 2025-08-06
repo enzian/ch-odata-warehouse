@@ -58,6 +58,8 @@ resource "google_cloud_scheduler_job" "meteo_precip_10m" {
     }
   }
 
+  paused = true
+
   retry_config {
     min_backoff_duration = "10s"
     max_doublings        = 6
