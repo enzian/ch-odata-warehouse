@@ -139,14 +139,6 @@ resource "google_project_iam_binding" "scrape_sa_bq_writer" {
     "serviceAccount:${google_service_account.scrape_sa.email}",
   ]
 }
-resource "google_project_iam_binding" "scrape_sa_bq_jobsuser" {
-  project = google_project.ch-odata-wh-project.project_id
-  role    = "roles/bigquery.jobUser"
-
-  members = [
-    "serviceAccount:${google_service_account.scrape_sa.email}",
-  ]
-}
 
 resource "google_service_account" "scrape_trigger" {
   account_id = "scrape-trigger"
@@ -158,5 +150,27 @@ resource "google_project_iam_binding" "scrape_trigger_cloud_run_invoker" {
 
   members = [
     "serviceAccount:${google_service_account.scrape_trigger.email}",
+  ]
+}
+
+resource "google_service_account" "grafana" {
+  account_id = "grafana"
+}
+
+resource "google_project_iam_binding" "grafana_bq_reader" {
+  project = google_project.ch-odata-wh-project.project_id
+  role      = "roles/bigquery.dataViewer"
+  
+  members = [
+    "serviceAccount:${google_service_account.grafana.email}",
+  ]
+}
+resource "google_project_iam_binding" "bq_jobuser" {
+  project = google_project.ch-odata-wh-project.project_id
+  role      = "roles/bigquery.jobUser"
+  
+  members = [
+    "serviceAccount:${google_service_account.grafana.email}",
+    "serviceAccount:${google_service_account.scrape_sa.email}",
   ]
 }
