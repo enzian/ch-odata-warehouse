@@ -109,6 +109,39 @@ resource "google_project_iam_member" "datatransfer-permissions" {
 }
 
 
+resource "google_bigquery_data_transfer_config" "dwpnt_10min_dedup_job" {
+  project = google_project.ch-odata-wh-project.project_id
+
+  service_account_name = google_service_account.scrape_sa.email
+
+  display_name           = "dwpnt_10min_dedup"
+  location               = "EU"
+  data_source_id         = "scheduled_query"
+  schedule               = "every day 23:10"
+  destination_dataset_id = google_bigquery_dataset.ch_meteo.dataset_id
+  params = {
+    query = file("${path.root}/meteo/dwpnt_10min/duplicate_cleanup.sql")
+  }
+
+  depends_on = [google_project_iam_member.datatransfer-permissions]
+}
+
+resource "google_bigquery_data_transfer_config" "precip_10min_dedup_job" {
+  project = google_project.ch-odata-wh-project.project_id
+
+  service_account_name = google_service_account.scrape_sa.email
+
+  display_name           = "precip_10min_dedup"
+  location               = "EU"
+  data_source_id         = "scheduled_query"
+  schedule               = "every day 23:10"
+  destination_dataset_id = google_bigquery_dataset.ch_meteo.dataset_id
+  params = {
+    query = file("${path.root}/meteo/precip_10min/duplicate_cleanup.sql")
+  }
+
+  depends_on = [google_project_iam_member.datatransfer-permissions]
+}
 
 resource "google_bigquery_data_transfer_config" "radation_dedup_job" {
   project = google_project.ch-odata-wh-project.project_id
@@ -122,6 +155,75 @@ resource "google_bigquery_data_transfer_config" "radation_dedup_job" {
   destination_dataset_id = google_bigquery_dataset.ch_meteo.dataset_id
   params = {
     query = file("${path.root}/meteo/radiation_10min/duplicate_cleanup.sql")
+  }
+
+  depends_on = [google_project_iam_member.datatransfer-permissions]
+}
+
+
+resource "google_bigquery_data_transfer_config" "rh_10min_dedup_job" {
+  project = google_project.ch-odata-wh-project.project_id
+
+  service_account_name = google_service_account.scrape_sa.email
+
+  display_name           = "rh_10min_dedup"
+  location               = "EU"
+  data_source_id         = "scheduled_query"
+  schedule               = "every day 23:10"
+  destination_dataset_id = google_bigquery_dataset.ch_meteo.dataset_id
+  params = {
+    query = file("${path.root}/meteo/rh_10min/duplicate_cleanup.sql")
+  }
+
+  depends_on = [google_project_iam_member.datatransfer-permissions]
+}
+
+resource "google_bigquery_data_transfer_config" "sunshine_10min_dedup_job" {
+  project = google_project.ch-odata-wh-project.project_id
+
+  service_account_name = google_service_account.scrape_sa.email
+
+  display_name           = "sunshine_10min_dedup"
+  location               = "EU"
+  data_source_id         = "scheduled_query"
+  schedule               = "every day 23:10"
+  destination_dataset_id = google_bigquery_dataset.ch_meteo.dataset_id
+  params = {
+    query = file("${path.root}/meteo/sunshine_10min/duplicate_cleanup.sql")
+  }
+
+  depends_on = [google_project_iam_member.datatransfer-permissions]
+}
+
+resource "google_bigquery_data_transfer_config" "temp_2m_10min_dedup_job" {
+  project = google_project.ch-odata-wh-project.project_id
+
+  service_account_name = google_service_account.scrape_sa.email
+
+  display_name           = "temp_2m_10min_dedup"
+  location               = "EU"
+  data_source_id         = "scheduled_query"
+  schedule               = "every day 23:10"
+  destination_dataset_id = google_bigquery_dataset.ch_meteo.dataset_id
+  params = {
+    query = file("${path.root}/meteo/temp_2m_10min/duplicate_cleanup.sql")
+  }
+
+  depends_on = [google_project_iam_member.datatransfer-permissions]
+}
+
+resource "google_bigquery_data_transfer_config" "wind_10min_dedup_job" {
+  project = google_project.ch-odata-wh-project.project_id
+
+  service_account_name = google_service_account.scrape_sa.email
+
+  display_name           = "wind_10min_dedup"
+  location               = "EU"
+  data_source_id         = "scheduled_query"
+  schedule               = "every day 23:10"
+  destination_dataset_id = google_bigquery_dataset.ch_meteo.dataset_id
+  params = {
+    query = file("${path.root}/meteo/wind_10min/duplicate_cleanup.sql")
   }
 
   depends_on = [google_project_iam_member.datatransfer-permissions]
